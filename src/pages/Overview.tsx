@@ -109,57 +109,74 @@ export default function Overview() {
         </Card>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-3">
-        <Card className="md:col-span-2">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle>Peak Hours</CardTitle>
-                <p className="text-xs text-muted-foreground mt-1">Vehicle density by time of day</p>
-              </div>
-              <BarChart3 className="h-4 w-4 text-muted-foreground" />
-            </div>
-          </CardHeader>
-          <CardContent className="pl-2">
-            <UsageChart data={stats} />
-          </CardContent>
+      <div className="grid gap-4 lg:grid-cols-3">
+        {/* Live Camera Feed */}
+        <Card className="lg:col-span-2 overflow-hidden bg-black aspect-video flex items-center justify-center group relative border-none shadow-2xl">
+          <div className="absolute top-4 left-4 z-10 flex items-center gap-2 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
+            <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
+            <span className="text-[10px] font-bold uppercase spacing-widest text-white/90">Live Camera Feed</span>
+          </div>
+          <img 
+            src="http://localhost:5001/video_feed" 
+            alt="Live Stream" 
+            className="w-full h-full object-contain"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?auto=format&fit=crop&q=80&w=1200";
+              (e.target as HTMLImageElement).className = "w-full h-full object-cover opacity-20 grayscale";
+            }}
+          />
+          <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-sm px-3 py-1 rounded text-[10px] text-white/80 font-mono border border-white/5">
+            CAM_01_ENTRANCE_HD
+          </div>
         </Card>
 
+        {/* Live Detections Moved Here for better flow */}
         <Card className="col-span-1">
-          <CardHeader>
-            <CardTitle>Live Detections</CardTitle>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg">Live Detections</CardTitle>
           </CardHeader>
           <CardContent>
             {recentDetections.length === 0 ? (
-              <div className="flex h-[350px] items-center justify-center text-sm text-muted-foreground border-dashed border-[1px] rounded-lg">
+              <div className="flex h-[320px] items-center justify-center text-sm text-muted-foreground border-dashed border-[1px] rounded-lg">
                 No recent detections
               </div>
             ) : (
-              <div className="space-y-4 max-h-[350px] overflow-y-auto pr-2">
+              <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                 {recentDetections.map((detection, i) => (
-                  <div key={i} className="flex items-center justify-between rounded-lg border p-4">
+                  <div key={i} className="flex items-center justify-between rounded-xl border bg-card/50 p-3 hover:bg-accent/50 transition-colors">
                     <div className="flex items-center space-x-3">
-                      {detection.status === 'ALLOWED' ? (
-                        <div className="h-2 w-2 rounded-full bg-green-500" />
-                      ) : (
-                        <div className="h-2 w-2 rounded-full bg-red-500" />
-                      )}
+                      <div className={`h-2 w-2 rounded-full ${detection.status === 'ALLOWED' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]'}`} />
                       <div>
-                        <p className="text-sm font-medium leading-none">{detection.plate}</p>
-                        <p className="text-[10px] text-muted-foreground mt-1">
-                          {detection.action ? `${detection.action} - ` : ''}{detection.status}
+                        <p className="text-sm font-bold font-mono tracking-tight">{detection.plate}</p>
+                        <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">
+                          {detection.action || 'Check'} • {detection.status}
                         </p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-[10px] text-muted-foreground mt-1">
-                        {new Date(detection.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </p>
+                    <div className="text-[10px] font-medium text-muted-foreground opacity-60">
+                      {new Date(detection.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </div>
                   </div>
                 ))}
               </div>
             )}
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-4">
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>Peak Hours Analytics</CardTitle>
+                <p className="text-xs text-muted-foreground mt-1">Vehicle density and entry patterns by time of day</p>
+              </div>
+              <BarChart3 className="h-4 w-4 text-muted-foreground" />
+            </div>
+          </CardHeader>
+          <CardContent className="h-[300px]">
+            <UsageChart data={stats} />
           </CardContent>
         </Card>
       </div>
