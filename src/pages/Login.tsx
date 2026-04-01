@@ -14,7 +14,7 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-    
+
     try {
       const response = await authService.login({ username, password });
       if (response.status === 'success') {
@@ -31,7 +31,7 @@ export default function Login() {
   };
 
   return (
-    <div 
+    <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center relative transition-opacity duration-1000"
       style={{ backgroundImage: 'url("/assets/login-bg.png")' }}
     >
@@ -46,7 +46,7 @@ export default function Login() {
               <Lock className="h-8 w-8 text-white" />
             </div>
             <h1 className="text-2xl font-bold text-white tracking-tight">Smart Parking</h1>
-            <p className="text-white/60 text-sm mt-1">Industrial Control Panel Login</p>
+            <p className="text-white/60 text-sm mt-1">Control Panel Login</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
@@ -104,7 +104,7 @@ export default function Login() {
           </form>
 
           <p className="mt-8 text-center text-white/30 text-[10px] font-medium tracking-widest uppercase">
-            SECURE ACCESS CONTROL • V1.4.0
+            SECURE ACCESS CONTROL
           </p>
         </div>
       </div>
