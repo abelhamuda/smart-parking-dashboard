@@ -1,8 +1,9 @@
-import { useState } from "react"
-import { NavLink, Outlet } from "react-router-dom"
-import { LayoutDashboard, CarFront, ScrollText, Settings, Menu, X, Info, CheckCircle2, AlertCircle } from "lucide-react"
+import { useState, useMemo } from "react"
+import { NavLink, Outlet, useNavigate } from "react-router-dom"
+import { LayoutDashboard, CarFront, ScrollText, Settings, Menu, X, Info, CheckCircle2, AlertCircle, LogOut, User } from "lucide-react"
 import { cn } from "../lib/utils"
 import { useSocket } from "../hooks/useSocket"
+import { authService } from "../services/api"
 import type { AlertNotification } from "../types"
 
 interface Toast {
@@ -14,6 +15,18 @@ interface Toast {
 export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [toasts, setToasts] = useState<Toast[]>([])
+  const navigate = useNavigate()
+
+  // Get user info from localStorage
+  const user = useMemo(() => {
+    const saved = localStorage.getItem('user')
+    return saved ? JSON.parse(saved) : { username: 'Admin' }
+  }, [])
+
+  const handleLogout = () => {
+    authService.logout()
+    navigate('/login')
+  }
 
   const addToast = (message: string, type: 'info' | 'success' | 'error' = 'info') => {
     const id = Math.random().toString(36).substring(2, 9);
@@ -101,6 +114,26 @@ export default function Layout() {
             </NavLink>
           ))}
         </nav>
+        
+        {/* User Section at Bottom of Sidebar */}
+        <div className="border-t p-4 space-y-4">
+          <div className="flex items-center gap-3 px-3">
+            <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center border">
+              <User className="h-4 w-4 text-muted-foreground" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs font-bold truncate">{user.full_name || user.username}</span>
+              <span className="text-[10px] text-muted-foreground uppercase tracking-tighter">Administrator</span>
+            </div>
+          </div>
+          <button 
+            onClick={handleLogout}
+            className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+          >
+            <LogOut className="h-4 w-4" />
+            Sign Out
+          </button>
+        </div>
       </aside>
 
       {/* Main Content */}
@@ -114,7 +147,7 @@ export default function Layout() {
           </button>
           <div className="flex-1" />
           <div className="flex items-center gap-4">
-            <div className="h-8 w-8 rounded-full border bg-muted" />
+            <span className="text-xs text-muted-foreground font-medium">Monitoring Station 01</span>
           </div>
         </header>
 
