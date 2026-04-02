@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react"
 import { NavLink, Outlet, useNavigate } from "react-router-dom"
-import { LayoutDashboard, CarFront, ScrollText, Settings, Menu, X, Info, CheckCircle2, AlertCircle, LogOut, User } from "lucide-react"
+import { LayoutDashboard, CarFront, ScrollText, Settings, Menu, X, Info, CheckCircle2, AlertCircle, LogOut, User, Cpu } from "lucide-react"
 import { cn } from "../lib/utils"
 import { useSocket } from "../hooks/useSocket"
 import { authService } from "../services/api"
@@ -49,6 +49,7 @@ export default function Layout() {
     { label: "Overview", href: "/", icon: <LayoutDashboard className="h-4 w-4" /> },
     { label: "Vehicles", href: "/vehicles", icon: <CarFront className="h-4 w-4" /> },
     { label: "Access Logs", href: "/logs", icon: <ScrollText className="h-4 w-4" /> },
+    { label: "Hardware", href: "/hardware", icon: <Cpu className="h-4 w-4" /> },
     { label: "Settings", href: "/settings", icon: <Settings className="h-4 w-4" /> },
   ]
 

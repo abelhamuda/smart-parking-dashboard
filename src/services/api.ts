@@ -49,3 +49,8 @@ export const gateService = {
   openGate: () => api.post('/gate/open').then((res) => res.data),
   closeGate: () => api.post('/gate/close').then((res) => res.data),
 };
+
+export const hardwareService = {
+  testComponent: (component: string) => api.post('/hardware/test', { component }).then((res) => res.data),
+  getStatus: () => api.get('/hardware/status').then((res) => res.data),
+};

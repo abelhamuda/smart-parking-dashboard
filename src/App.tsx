@@ -4,6 +4,7 @@ import Overview from './pages/Overview'
 import Vehicles from './pages/Vehicles'
 import Logs from './pages/Logs'
 import Settings from './pages/Settings'
+import Hardware from './pages/Hardware'
 import Login from './pages/Login'
 
 // Helper component to guard routes
@@ -29,6 +30,7 @@ export default function App() {
           <Route index element={<Overview />} />
           <Route path="vehicles" element={<Vehicles />} />
           <Route path="logs" element={<Logs />} />
+          <Route path="hardware" element={<Hardware />} />
           <Route path="settings" element={<Settings />} />
         </Route>
 
